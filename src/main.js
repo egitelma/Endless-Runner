@@ -1,5 +1,5 @@
 let config = {
-    type: Phaser.CANVAS,
+    type: Phaser.WEBGL,
     width: 960,
     height: 480,
     render: {
@@ -12,7 +12,7 @@ let config = {
         }
     },
     scene: [Menu, Play],
-    // backgroundColor: "#183d3c"
+    backgroundColor: "#183d3c"
 }
 
 let game = new Phaser.Game(config);
