@@ -1,14 +1,14 @@
 let config = {
     type: Phaser.WEBGL,
     width: 960,
-    height: 480,
+    height: 640,
     render: {
         pixelArt: true
     },
     physics: {
         default: "arcade",
         arcade: {
-            debug: true
+            // debug: true
         }
     },
     scene: [Menu, Play],
@@ -20,6 +20,9 @@ let game = new Phaser.Game(config);
 //reserve keyboard vars
 let keyLEFT, keyRIGHT, keyUP, keyDOWN, keySPACE;
 let textConfig;
+let cursors;
+
+let { width, height } = game.config
 
 // //custom menu vars
 // let spaceshipCount, jetCount, customTime;

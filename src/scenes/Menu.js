@@ -4,14 +4,17 @@ class Menu extends Phaser.Scene {
     }
 
     preload(){
-        //load sfx/background music
 
-        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 
     create(){
-        //place tile sprite/set up bg?
+        //set up graphics
+        const graphics = this.add.graphics();
 
+        graphics.fillGradientStyle(0x4dc9c6, 0x4dc9c6, 0x000000, 0x000000, 1);
+        graphics.fillRect(0, 0, game.config.width, game.config.height);
+
+        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 
     update(){
