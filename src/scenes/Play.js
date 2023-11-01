@@ -13,6 +13,7 @@ class Play extends Phaser.Scene {
         });
         this.load.image("fish", "./assets/fish.png")
         this.load.image("seaweedFront", "./assets/seaweed.png");
+        this.load.image("background_01", "./assets/background.png");
     }
 
     create(){
@@ -32,8 +33,11 @@ class Play extends Phaser.Scene {
         //set up graphics
         const graphics = this.add.graphics();
 
-        graphics.fillGradientStyle(0x4dc9c6, 0x4dc9c6, 0x323c39, 0x323c39, 1);
+        graphics.fillGradientStyle(0x4dc9c6, 0x4dc9c6, 0x000000, 0x000000, 1);
         graphics.fillRect(0, 0, width, height);
+
+        //background tile sprite
+        this.background01 = this.add.tileSprite(0, 0, 960, 640, "background_01").setOrigin(0, 0);
 
         // this.diver = new Diver(this, 112, height/2, "diver").setScale(3);
         this.diver = this.physics.add.sprite(0, height/2, "diver").setScale(2);
@@ -44,7 +48,8 @@ class Play extends Phaser.Scene {
         this.seaweedFront.depth = 1; //and STAY in the foreground
 
         //feesh
-        this.fish = this.add.group(); //array of Fish objects on screen
+        // this.fish = this.add.group(); //array of Fish objects on screen
+        this.fish = [];
 
         //keyboard cursors
         cursors = this.input.keyboard.createCursorKeys();
@@ -63,7 +68,7 @@ class Play extends Phaser.Scene {
         //swimming animation
         this.anims.create({
             key: "diver-swim",
-            frameRate: 5,
+            frameRate: this.swimSpeed,
             repeat: -1,
             frames: this.anims.generateFrameNumbers("diver", {
                 start: 0,
@@ -71,20 +76,8 @@ class Play extends Phaser.Scene {
             })
         });
 
-        //seaweed animation
-        this.anims.create({
-            key: "seaweed-idle",
-            frameRate: 2,
-            repeat: -1,
-            frames: this.anims.generateFrameNumbers("seaweed", {
-                start: 0,
-                end: 1
-            })
-        });
-
         //diver-fish collider
         this.physics.add.collider(this.diver, this.fish, (diver, fish) => {
-            //ball & cup are new parameters. they just keep it clean scope-wise
             fish.destroy();
             this.fishCounter++;
             this.fishText.destroy();
@@ -128,9 +121,10 @@ class Play extends Phaser.Scene {
             delay: 1000,
             callback: () => {
                 let randomY = Phaser.Math.Between(20, height-20);
-                this.fish.create(this.physics.add.sprite(width, randomY, "fish").setScale(3));
-                let fishArray = this.fish.getChildren();
-                console.log(fishArray);
+                // this.fish.create(this.physics.add.sprite(width, randomY, "fish").setScale(3));
+                // let fishArray = this.fish.getChildren();
+                // console.log(fishArray);
+                this.fish.push(this.physics.add.sprite(width, randomY, "fish").setScale(3));
             },
             loop: true
         });
@@ -138,13 +132,18 @@ class Play extends Phaser.Scene {
         
         this.DIVER_VELOCITY = 200;
         this.FISH_VELOCITY = -100;
-        Phaser.Actions.IncX(this.fish.getChildren(), this.FISH_VELOCITY);
+        // Phaser.Actions.IncX(this.fish.getChildren(), this.FISH_VELOCITY);
 
     }
 
     update(){
         //scroll items
         this.seaweedFront.tilePositionX += this.swimSpeed*2;
+        this.background01.tilePositionX += this.swimSpeed;
+
+        for (let i=0; i<this.fish.length; i++){
+            this.fish[i].setVelocity(this.FISH_VELOCITY, 0);
+        }
         
         // let fishArray = this.fish.getChildren();
         // for (let i=0; i<fishArray.length; i++){
